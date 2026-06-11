@@ -1,4 +1,4 @@
-chrome.commands.onCommand.addListener(async (command) => {
+async function handleZoom(command) {
   const { zoom } = await chrome.storage.session.get({ zoom: 1 });
   let currentZoom = zoom;
 
@@ -19,11 +19,9 @@ chrome.commands.onCommand.addListener(async (command) => {
     target: { tabId: tab.id, allFrames: false },
     func: (zoom) => {
       let targetElement = document.querySelector('.html5-video-container');
-      
       if (!targetElement) {
         targetElement = document.querySelector('video');
       }
-
       if (targetElement) {
         targetElement.style.transform = `scale(${zoom})`;
         targetElement.style.transition = 'transform 0.2s ease';
@@ -31,4 +29,13 @@ chrome.commands.onCommand.addListener(async (command) => {
     },
     args: [currentZoom]
   });
+}
+
+chrome.commands.onCommand.addListener((command) => handleZoom(command));
+
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+  if (message.command) {
+    handleZoom(message.command).then(() => sendResponse({}));
+    return true;
+  }
 });
