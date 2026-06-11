@@ -3,10 +3,7 @@
   "name": "Video Zoomer",
   "version": "1.4",
   "permissions": ["activeTab", "scripting", "storage"],
-  "host_permissions": [
-    "https://*.youtube.com/*",
-    "https://*.googlevideo.com/*"
-    ],
+  "host_permissions": ["<all_urls>"],
     "commands": {
       "zoom-in-shortcut": {
         "suggested_key": {
