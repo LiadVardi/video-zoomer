@@ -9,9 +9,10 @@ async function sendCommand(command) {
 }
 
 async function updateOriginDisplay() {
-  const { origin } = await chrome.storage.session.get({ origin: 'center center' });
+  const { originX, originY } = await chrome.storage.session.get({ originX: 'center', originY: 'center' });
   document.querySelectorAll('.origin-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.origin === origin);
+    const [bx, by] = btn.dataset.origin.split(' ');
+    btn.classList.toggle('active', bx === originX && by === originY);
   });
 }
 
@@ -25,15 +26,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
   document.querySelectorAll('.origin-btn').forEach(btn => {
     btn.addEventListener('click', () => {
+      const [originX, originY] = btn.dataset.origin.split(' ');
       document.querySelectorAll('.origin-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      chrome.runtime.sendMessage({ command: 'set-origin', origin: btn.dataset.origin });
+      chrome.runtime.sendMessage({ command: 'set-origin', originX, originY });
     });
   });
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'session' && changes.zoom) {
-    document.getElementById('zoom-level').textContent = changes.zoom.newValue + 'x';
+  if (area === 'session') {
+    if (changes.zoom) {
+      document.getElementById('zoom-level').textContent = changes.zoom.newValue + 'x';
+    }
+    if (changes.originX || changes.originY) {
+      updateOriginDisplay();
+    }
   }
 });

@@ -1,5 +1,5 @@
 body {
-  width: 220px;
+  width: 250px;
   padding: 16px;
   margin: 0;
   font-family: sans-serif;
@@ -100,4 +100,27 @@ button:hover {
 
 .origin-btn.active {
   background: #fff;
+}
+
+.origin-hints {
+  margin-top: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.origin-hint-item {
+  text-align: center;
+}
+
+.origin-hint-direction {
+  font-size: 14px;
+  font-weight: bold;
+  color: rgba(255, 255, 255, 0.9);
+}
+
+.origin-hint-key {
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.55);
 }

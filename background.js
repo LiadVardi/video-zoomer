@@ -1,7 +1,8 @@
-function applyZoom(tab, zoom, origin) {
+function applyZoom(tab, zoom, originX, originY) {
   chrome.scripting.executeScript({
     target: { tabId: tab.id, allFrames: true },
-    func: (zoom, origin) => {
+    func: (zoom, originX, originY) => {
+      const origin = `${originX} ${originY}`;
       const youtubeContainer = document.querySelector('.html5-video-container');
       if (youtubeContainer) {
         const video = youtubeContainer.querySelector('video');
@@ -44,42 +45,67 @@ function applyZoom(tab, zoom, origin) {
         }
       }
     },
-    args: [zoom, origin]
+    args: [zoom, originX, originY]
   });
 }
 
 async function handleZoom(command) {
-  const { zoom, origin } = await chrome.storage.session.get({ zoom: 1, origin: 'center center' });
+  const { zoom, originX, originY } = await chrome.storage.session.get({ zoom: 1, originX: 'center', originY: 'center' });
   let currentZoom = zoom;
 
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab) return;
 
-  if (command === "zoom-in-shortcut") {
+  if (command === 'zoom-in-shortcut') {
     currentZoom = Math.min(currentZoom + 0.25, 4);
-  } else if (command === "zoom-out-shortcut") {
+  } else if (command === 'zoom-out-shortcut') {
     currentZoom = Math.max(currentZoom - 0.25, 1);
-  } else if (command === "zoom-reset-shortcut") {
+  } else if (command === 'zoom-reset-shortcut') {
     currentZoom = 1;
   }
 
   await chrome.storage.session.set({ zoom: currentZoom });
-  applyZoom(tab, currentZoom, origin);
+  applyZoom(tab, currentZoom, originX, originY);
 }
 
-async function handleSetOrigin(newOrigin) {
-  await chrome.storage.session.set({ origin: newOrigin });
+const X_CYCLE = ['left', 'center', 'right'];
+const Y_CYCLE = ['top', 'center', 'bottom'];
+
+async function handleOriginHorizontal() {
+  const { zoom, originX, originY } = await chrome.storage.session.get({ zoom: 1, originX: 'center', originY: 'center' });
+  const nextX = X_CYCLE[(X_CYCLE.indexOf(originX) + 1) % X_CYCLE.length];
+  await chrome.storage.session.set({ originX: nextX });
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!tab) return;
+  applyZoom(tab, zoom, nextX, originY);
+}
+
+async function handleOriginVertical() {
+  const { zoom, originX, originY } = await chrome.storage.session.get({ zoom: 1, originX: 'center', originY: 'center' });
+  const nextY = Y_CYCLE[(Y_CYCLE.indexOf(originY) + 1) % Y_CYCLE.length];
+  await chrome.storage.session.set({ originY: nextY });
+  const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+  if (!tab) return;
+  applyZoom(tab, zoom, originX, nextY);
+}
+
+async function handleSetOrigin(originX, originY) {
+  await chrome.storage.session.set({ originX, originY });
   const { zoom } = await chrome.storage.session.get({ zoom: 1 });
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab) return;
-  applyZoom(tab, zoom, newOrigin);
+  applyZoom(tab, zoom, originX, originY);
 }
 
-chrome.commands.onCommand.addListener((command) => handleZoom(command));
+chrome.commands.onCommand.addListener((command) => {
+  if (command === 'origin-horizontal-shortcut') handleOriginHorizontal();
+  else if (command === 'origin-vertical-shortcut') handleOriginVertical();
+  else handleZoom(command);
+});
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === 'set-origin') {
-    handleSetOrigin(message.origin).then(() => sendResponse({}));
+    handleSetOrigin(message.originX, message.originY).then(() => sendResponse({}));
     return true;
   }
   if (message.command) {

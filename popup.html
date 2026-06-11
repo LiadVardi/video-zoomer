@@ -13,11 +13,11 @@
   <div class="buttons">
     <button id="btn-zoom-in">
       <span class="label">Zoom In</span>
-      <span class="shortcut">Ctrl+Shift+Z</span>
+      <span class="shortcut">Ctrl+Shift+Scroll Up</span>
     </button>
     <button id="btn-zoom-out">
       <span class="label">Zoom Out</span>
-      <span class="shortcut">Ctrl+Shift+X</span>
+      <span class="shortcut">Ctrl+Shift+Scroll Down</span>
     </button>
     <button id="btn-reset">
       <span class="label">Reset</span>
@@ -36,6 +36,16 @@
       <button class="origin-btn" data-origin="left bottom"></button>
       <button class="origin-btn" data-origin="center bottom"></button>
       <button class="origin-btn" data-origin="right bottom"></button>
+    </div>
+    <div class="origin-hints">
+      <div class="origin-hint-item">
+        <div class="origin-hint-direction">left → center → right</div>
+        <div class="origin-hint-key">Ctrl+Shift+Z</div>
+      </div>
+      <div class="origin-hint-item">
+        <div class="origin-hint-direction">top → center → bottom</div>
+        <div class="origin-hint-key">Ctrl+Shift+X</div>
+      </div>
     </div>
   </div>
   <script src="popup.js"></script>
