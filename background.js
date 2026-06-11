@@ -6,9 +6,9 @@ async function handleZoom(command) {
   if (!tab) return;
 
   if (command === "zoom-in-shortcut") {
-    currentZoom = Math.min(currentZoom + 0.5, 4);
+    currentZoom = Math.min(currentZoom + 0.25, 4);
   } else if (command === "zoom-out-shortcut") {
-    currentZoom = Math.max(currentZoom - 0.5, 1);
+    currentZoom = Math.max(currentZoom - 0.25, 1);
   } else if (command === "zoom-reset-shortcut") {
     currentZoom = 1;
   }
