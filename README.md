@@ -8,7 +8,7 @@ A Chrome extension that lets users zoom into any HTML5 video on any website usin
 
 - Zoom in, zoom out, and reset zoom on any HTML5 video
 - Works on YouTube, embedded YouTube players, and other sites with native HTML5 video
-- Keyboard shortcuts for quick control
+- Zoom in/out via Ctrl+Shift+Scroll wheel, cycle zoom anchor point with keyboard shortcuts
 - Popup UI showing the current zoom level with buttons
 - Zoom state is preserved even when the browser is idle
 - Maximum zoom capped at 4x, minimum at 1x
@@ -16,11 +16,13 @@ A Chrome extension that lets users zoom into any HTML5 video on any website usin
 
 ## Keyboard Shortcuts
 
-| Action     | Shortcut       |
-|------------|----------------|
-| Zoom In    | Ctrl+Shift+Z   |
-| Zoom Out   | Ctrl+Shift+X   |
-| Reset Zoom | Ctrl+Shift+R   |
+| Action | Shortcut |
+|---|---|
+| Zoom In | Ctrl+Shift+Scroll Up |
+| Zoom Out | Ctrl+Shift+Scroll Down |
+| Reset Zoom | Ctrl+Shift+R |
+| Cycle origin horizontal (left → center → right) | Ctrl+Shift+Z |
+| Cycle origin vertical (top → center → bottom) | Ctrl+Shift+X |
 
 ## Screenshot
 
@@ -42,7 +44,9 @@ Works on any site with a native HTML5 video element. YouTube and embedded YouTub
 
 - `manifest.json` — Extension configuration (MV3)
 - `background.js` — Service worker, handles zoom logic and keyboard shortcuts
+- `content.js` — Content script, listens for Ctrl+Shift+Scroll to trigger zoom
 - `popup.html` — Popup UI structure
 - `popup.css` — Popup styles
 - `popup.js` — Popup logic, reads zoom state and sends commands
 - `icons/icon.png` — Extension icon
+- `screenshots/popup.png` — Screenshot used in README
