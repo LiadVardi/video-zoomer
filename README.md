@@ -1,6 +1,4 @@
-<img src="icons/icon.png" width="32" height="32" align="left" style="margin-right: 8px;" alt="Video Zoomer logo">
-
-# Video Zoomer
+<h1><img src="icons/icon.png" width="32" height="32" style="vertical-align: middle; margin-right: 8px;" alt="Video Zoomer logo"> Video Zoomer</h1>
 
 ![Version](https://img.shields.io/badge/version-1.4-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Manifest V3](https://img.shields.io/badge/manifest-V3-orange)
 
