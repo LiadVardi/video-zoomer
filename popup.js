@@ -15,3 +15,9 @@ document.addEventListener('DOMContentLoaded', () => {
   document.getElementById('btn-zoom-out').addEventListener('click', () => sendCommand('zoom-out-shortcut'));
   document.getElementById('btn-reset').addEventListener('click', () => sendCommand('zoom-reset-shortcut'));
 });
+
+chrome.storage.onChanged.addListener((changes, area) => {
+  if (area === 'session' && changes.zoom) {
+    document.getElementById('zoom-level').textContent = changes.zoom.newValue + 'x';
+  }
+});
