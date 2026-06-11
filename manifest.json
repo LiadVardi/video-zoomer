@@ -1,0 +1,33 @@
+{
+  "manifest_version": 3,
+  "name": "Video Zoomer",
+  "version": "1.4",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "https://*.youtube.com/*",
+    "https://*.googlevideo.com/*"
+    ],
+    "commands": {
+      "zoom-in-shortcut": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+Z"
+        },
+        "description": "Zoom into video"
+      },
+      "zoom-out-shortcut": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+X"
+        },
+        "description": "Zoom out of video"
+      },
+      "zoom-reset-shortcut": {
+        "suggested_key": {
+          "default": "Ctrl+Shift+R"
+        },
+        "description": "Reset video zoom"
+      }
+    },
+  "background": {
+    "service_worker": "background.js"
+  }
+  }
