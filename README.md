@@ -12,6 +12,7 @@ A Chrome extension that lets users zoom into any HTML5 video on any website usin
 - Popup UI showing the current zoom level with buttons
 - Zoom state is preserved even when the browser is idle
 - Maximum zoom capped at 4x, minimum at 1x
+- 3x3 origin picker to control the zoom anchor point (top, center, bottom × left, center, right)
 
 ## Keyboard Shortcuts
 
