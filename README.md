@@ -1,6 +1,6 @@
 <h1><img src="icons/icon.png" width="32" height="32" style="vertical-align: middle; margin-right: 8px;" alt="Video Zoomer logo"> Video Zoomer</h1>
 
-![Version](https://img.shields.io/badge/version-1.4-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Manifest V3](https://img.shields.io/badge/manifest-V3-orange)
+![Version](https://img.shields.io/badge/version-1.5-blue) ![License](https://img.shields.io/badge/license-MIT-green) ![Manifest V3](https://img.shields.io/badge/manifest-V3-orange)
 
 A Chrome extension that lets users zoom into any HTML5 video on any website using keyboard shortcuts or a popup UI.
 
@@ -13,6 +13,7 @@ A Chrome extension that lets users zoom into any HTML5 video on any website usin
 - Zoom state is preserved even when the browser is idle
 - Maximum zoom capped at 4x, minimum at 1x
 - 3x3 origin picker to control the zoom anchor point via the popup grid or Ctrl+Shift+Arrow keys
+- Enable/disable toggle in the popup to turn all extension shortcuts and zoom off entirely, restoring native page behavior
 
 ## Keyboard Shortcuts
 
