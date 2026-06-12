@@ -11,9 +11,19 @@ function applyZoom(tab, zoom, originX, originY) {
           video.style.transformOrigin = origin;
           video.style.transition = 'transform 0.2s ease';
         }
-        youtubeContainer.style.overflow = 'visible';
-        if (youtubeContainer.parentElement) {
-          youtubeContainer.parentElement.style.overflow = 'visible';
+        const moviePlayer = youtubeContainer.closest('#movie_player');
+        if (moviePlayer) {
+          if (zoom === 1) {
+            if (moviePlayer.hasAttribute('data-vz-original-overflow')) {
+              moviePlayer.style.overflow = moviePlayer.getAttribute('data-vz-original-overflow');
+              moviePlayer.removeAttribute('data-vz-original-overflow');
+            }
+          } else {
+            if (!moviePlayer.hasAttribute('data-vz-original-overflow')) {
+              moviePlayer.setAttribute('data-vz-original-overflow', moviePlayer.style.overflow);
+            }
+            moviePlayer.style.overflow = 'hidden';
+          }
         }
       } else {
         const videos = document.querySelectorAll('video');
