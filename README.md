@@ -8,11 +8,11 @@ A Chrome extension that lets users zoom into any HTML5 video on any website usin
 
 - Zoom in, zoom out, and reset zoom on any HTML5 video
 - Works on YouTube, embedded YouTube players, and other sites with native HTML5 video
-- Zoom in/out via Ctrl+Shift+Scroll wheel, cycle zoom anchor point with keyboard shortcuts
+- Zoom in/out via Ctrl+Shift+Scroll, reset via Ctrl+Shift+Middle Click, and move the zoom anchor point with Ctrl+Shift+Arrow keys
 - Popup UI showing the current zoom level with buttons
 - Zoom state is preserved even when the browser is idle
 - Maximum zoom capped at 4x, minimum at 1x
-- 3x3 origin picker to control the zoom anchor point (top, center, bottom × left, center, right)
+- 3x3 origin picker to control the zoom anchor point via the popup grid or Ctrl+Shift+Arrow keys
 
 ## Keyboard Shortcuts
 
@@ -20,9 +20,8 @@ A Chrome extension that lets users zoom into any HTML5 video on any website usin
 |---|---|
 | Zoom In | Ctrl+Shift+Scroll Up |
 | Zoom Out | Ctrl+Shift+Scroll Down |
-| Reset Zoom | Ctrl+Shift+R |
-| Cycle origin horizontal (left → center → right) | Ctrl+Shift+Z |
-| Cycle origin vertical (top → center → bottom) | Ctrl+Shift+X |
+| Reset Zoom | Ctrl+Shift+Middle Click |
+| Move zoom origin | Ctrl+Shift+Arrow keys |
 
 ## Screenshot
 
@@ -38,13 +37,13 @@ A Chrome extension that lets users zoom into any HTML5 video on any website usin
 
 ## Supported Sites
 
-Works on any site with a native HTML5 video element. YouTube and embedded YouTube players are confirmed to work. Sites that load video via blob URLs from a different origin (such as Vimeo embeds) may not be supported due to browser security restrictions.
+Works on any site with a native HTML5 video element. YouTube and embedded YouTube players are confirmed to work. Video players rendered inside a Shadow DOM (used by some news sites) are also supported as a fallback when the video cannot be found via normal means. Sites that load video via blob URLs from a different origin (such as Vimeo embeds) may not be supported due to browser security restrictions.
 
 ## Project Structure
 
 - `manifest.json` — Extension configuration (MV3)
 - `background.js` — Service worker, handles zoom logic and keyboard shortcuts
-- `content.js` — Content script, listens for Ctrl+Shift+Scroll to trigger zoom
+- `content.js` — Content script, handles Ctrl+Shift+Scroll (zoom), Arrow keys (move origin), and Middle Click (reset)
 - `popup.html` — Popup UI structure
 - `popup.css` — Popup styles
 - `popup.js` — Popup logic, reads zoom state and sends commands
