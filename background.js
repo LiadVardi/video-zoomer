@@ -32,6 +32,19 @@ function applyZoom(tab, zoom, originX, originY) {
         if (!video && videos.length > 0) {
           video = videos[0];
         }
+        if (!video) {
+          function findVideosDeep(root = document) {
+            let videos = [...root.querySelectorAll('video')];
+            root.querySelectorAll('*').forEach(el => {
+              if (el.shadowRoot) {
+                videos = videos.concat(findVideosDeep(el.shadowRoot));
+              }
+            });
+            return videos;
+          }
+          const shadowVideos = findVideosDeep();
+          if (shadowVideos.length > 0) video = shadowVideos[0];
+        }
         if (video) {
           video.style.transform = `scale(${zoom})`;
           video.style.transformOrigin = origin;
