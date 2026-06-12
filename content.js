@@ -18,15 +18,19 @@ document.addEventListener('keydown', (event) => {
 
   if (event.key === 'ArrowRight') {
     event.preventDefault();
+    event.stopImmediatePropagation();
     chrome.runtime.sendMessage({ command: 'origin-horizontal-shortcut', direction: 'forward' });
   } else if (event.key === 'ArrowLeft') {
     event.preventDefault();
+    event.stopImmediatePropagation();
     chrome.runtime.sendMessage({ command: 'origin-horizontal-shortcut', direction: 'backward' });
   } else if (event.key === 'ArrowDown') {
     event.preventDefault();
+    event.stopImmediatePropagation();
     chrome.runtime.sendMessage({ command: 'origin-vertical-shortcut', direction: 'forward' });
   } else if (event.key === 'ArrowUp') {
     event.preventDefault();
+    event.stopImmediatePropagation();
     chrome.runtime.sendMessage({ command: 'origin-vertical-shortcut', direction: 'backward' });
   }
 }, true);
