@@ -84,18 +84,24 @@ async function handleZoom(command) {
 const X_CYCLE = ['left', 'center', 'right'];
 const Y_CYCLE = ['top', 'center', 'bottom'];
 
-async function handleOriginHorizontal() {
+async function handleOriginHorizontal(direction) {
   const { zoom, originX, originY } = await chrome.storage.session.get({ zoom: 1, originX: 'center', originY: 'center' });
-  const nextX = X_CYCLE[(X_CYCLE.indexOf(originX) + 1) % X_CYCLE.length];
+  const idx = X_CYCLE.indexOf(originX);
+  const nextX = direction === 'backward'
+    ? X_CYCLE[(idx - 1 + X_CYCLE.length) % X_CYCLE.length]
+    : X_CYCLE[(idx + 1) % X_CYCLE.length];
   await chrome.storage.session.set({ originX: nextX });
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab) return;
   applyZoom(tab, zoom, nextX, originY);
 }
 
-async function handleOriginVertical() {
+async function handleOriginVertical(direction) {
   const { zoom, originX, originY } = await chrome.storage.session.get({ zoom: 1, originX: 'center', originY: 'center' });
-  const nextY = Y_CYCLE[(Y_CYCLE.indexOf(originY) + 1) % Y_CYCLE.length];
+  const idx = Y_CYCLE.indexOf(originY);
+  const nextY = direction === 'backward'
+    ? Y_CYCLE[(idx - 1 + Y_CYCLE.length) % Y_CYCLE.length]
+    : Y_CYCLE[(idx + 1) % Y_CYCLE.length];
   await chrome.storage.session.set({ originY: nextY });
   const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
   if (!tab) return;
@@ -110,15 +116,17 @@ async function handleSetOrigin(originX, originY) {
   applyZoom(tab, zoom, originX, originY);
 }
 
-chrome.commands.onCommand.addListener((command) => {
-  if (command === 'origin-horizontal-shortcut') handleOriginHorizontal();
-  else if (command === 'origin-vertical-shortcut') handleOriginVertical();
-  else handleZoom(command);
-});
-
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === 'set-origin') {
     handleSetOrigin(message.originX, message.originY).then(() => sendResponse({}));
+    return true;
+  }
+  if (message.command === 'origin-horizontal-shortcut') {
+    handleOriginHorizontal(message.direction).then(() => sendResponse({}));
+    return true;
+  }
+  if (message.command === 'origin-vertical-shortcut') {
+    handleOriginVertical(message.direction).then(() => sendResponse({}));
     return true;
   }
   if (message.command) {

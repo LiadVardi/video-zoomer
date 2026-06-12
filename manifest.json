@@ -5,26 +5,6 @@
   "description": "Chrome extension to zoom into any HTML5 video using keyboard shortcuts",
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": ["<all_urls>"],
-  "commands": {
-    "origin-horizontal-shortcut": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+Z"
-      },
-      "description": "Cycle zoom origin horizontally"
-    },
-    "origin-vertical-shortcut": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+X"
-      },
-      "description": "Cycle zoom origin vertically"
-    },
-    "zoom-reset-shortcut": {
-      "suggested_key": {
-        "default": "Ctrl+Shift+R"
-      },
-      "description": "Reset video zoom"
-    }
-  },
   "content_scripts": [
     {
       "matches": ["<all_urls>"],
