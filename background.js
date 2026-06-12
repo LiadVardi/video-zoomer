@@ -127,20 +127,35 @@ async function handleSetOrigin(originX, originY) {
 }
 
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-  if (message.command === 'set-origin') {
-    handleSetOrigin(message.originX, message.originY).then(() => sendResponse({}));
+  if (message.command === 'toggle-enabled') {
+    (async () => {
+      const { enabled, zoom, originX, originY } = await chrome.storage.session.get({ enabled: true, zoom: 1, originX: 'center', originY: 'center' });
+      const newEnabled = !enabled;
+      await chrome.storage.session.set({ enabled: newEnabled });
+      if (!newEnabled) {
+        await chrome.storage.session.set({ zoom: 1 });
+        const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
+        if (tab) applyZoom(tab, 1, originX, originY);
+      }
+      sendResponse({ enabled: newEnabled });
+    })();
     return true;
   }
-  if (message.command === 'origin-horizontal-shortcut') {
-    handleOriginHorizontal(message.direction).then(() => sendResponse({}));
-    return true;
-  }
-  if (message.command === 'origin-vertical-shortcut') {
-    handleOriginVertical(message.direction).then(() => sendResponse({}));
-    return true;
-  }
-  if (message.command) {
-    handleZoom(message.command).then(() => sendResponse({}));
-    return true;
-  }
+
+  chrome.storage.session.get({ enabled: true }).then(({ enabled }) => {
+    if (!enabled) {
+      sendResponse({});
+      return;
+    }
+    if (message.command === 'set-origin') {
+      handleSetOrigin(message.originX, message.originY).then(() => sendResponse({}));
+    } else if (message.command === 'origin-horizontal-shortcut') {
+      handleOriginHorizontal(message.direction).then(() => sendResponse({}));
+    } else if (message.command === 'origin-vertical-shortcut') {
+      handleOriginVertical(message.direction).then(() => sendResponse({}));
+    } else if (message.command) {
+      handleZoom(message.command).then(() => sendResponse({}));
+    }
+  });
+  return true;
 });

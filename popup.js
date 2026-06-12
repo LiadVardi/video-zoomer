@@ -16,9 +16,21 @@ async function updateOriginDisplay() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+function updateToggleButton(enabled) {
+  document.getElementById('toggle-enabled-checkbox').checked = enabled;
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
   updateDisplay();
   updateOriginDisplay();
+
+  const { enabled } = await chrome.storage.session.get({ enabled: true });
+  updateToggleButton(enabled);
+
+  document.getElementById('toggle-enabled-checkbox').addEventListener('change', async () => {
+    const response = await chrome.runtime.sendMessage({ command: 'toggle-enabled' });
+    updateToggleButton(response.enabled);
+  });
 
   document.getElementById('btn-zoom-in').addEventListener('click', () => sendCommand('zoom-in-shortcut'));
   document.getElementById('btn-zoom-out').addEventListener('click', () => sendCommand('zoom-out-shortcut'));
@@ -41,6 +53,9 @@ chrome.storage.onChanged.addListener((changes, area) => {
     }
     if (changes.originX || changes.originY) {
       updateOriginDisplay();
+    }
+    if (changes.enabled) {
+      updateToggleButton(changes.enabled.newValue);
     }
   }
 });
