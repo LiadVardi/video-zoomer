@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Video Zoomer",
-  "version": "1.4",
+  "version": "1.5",
   "description": "Chrome extension to zoom into any HTML5 video using keyboard shortcuts",
   "permissions": ["activeTab", "scripting", "storage"],
   "host_permissions": ["<all_urls>"],
