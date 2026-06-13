@@ -1,12 +1,12 @@
 let lastZoomTime = 0;
 let extensionEnabled = true;
 
-chrome.storage.session.get({ enabled: true }).then(({ enabled }) => {
+chrome.storage.local.get({ enabled: true }).then(({ enabled }) => {
   extensionEnabled = enabled;
 });
 
 chrome.storage.onChanged.addListener((changes, area) => {
-  if (area === 'session' && changes.enabled) {
+  if (area === 'local' && changes.enabled) {
     extensionEnabled = changes.enabled.newValue;
   }
 });

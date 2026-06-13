@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   updateDisplay();
   updateOriginDisplay();
 
-  const { enabled } = await chrome.storage.session.get({ enabled: true });
+  const { enabled } = await chrome.storage.local.get({ enabled: true });
   updateToggleButton(enabled);
 
   document.getElementById('toggle-enabled-checkbox').addEventListener('change', async () => {
@@ -54,6 +54,8 @@ chrome.storage.onChanged.addListener((changes, area) => {
     if (changes.originX || changes.originY) {
       updateOriginDisplay();
     }
+  }
+  if (area === 'local') {
     if (changes.enabled) {
       updateToggleButton(changes.enabled.newValue);
     }

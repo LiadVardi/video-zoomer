@@ -129,9 +129,10 @@ async function handleSetOrigin(originX, originY) {
 chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
   if (message.command === 'toggle-enabled') {
     (async () => {
-      const { enabled, zoom, originX, originY } = await chrome.storage.session.get({ enabled: true, zoom: 1, originX: 'center', originY: 'center' });
+      const { enabled } = await chrome.storage.local.get({ enabled: true });
+      const { zoom, originX, originY } = await chrome.storage.session.get({ zoom: 1, originX: 'center', originY: 'center' });
       const newEnabled = !enabled;
-      await chrome.storage.session.set({ enabled: newEnabled });
+      await chrome.storage.local.set({ enabled: newEnabled });
       if (!newEnabled) {
         await chrome.storage.session.set({ zoom: 1 });
         const [tab] = await chrome.tabs.query({ active: true, currentWindow: true });
@@ -142,7 +143,7 @@ chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
     return true;
   }
 
-  chrome.storage.session.get({ enabled: true }).then(({ enabled }) => {
+  chrome.storage.local.get({ enabled: true }).then(({ enabled }) => {
     if (!enabled) {
       sendResponse({});
       return;
